@@ -7,7 +7,6 @@ function App() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
 
-  // Función para buscar series en la API
   const searchSeries = async () => {
     if (!query.trim()) return;
 
@@ -23,14 +22,12 @@ function App() {
     <div>
       <h1>Buscador de Series</h1>
 
-      {/* Barra de búsqueda */}
       <SearchBar
         query={query}
         setQuery={setQuery}
         searchSeries={searchSeries}
       />
 
-      {/* Lista de series */}
       <SeriesList results={results} />
     </div>
   );
