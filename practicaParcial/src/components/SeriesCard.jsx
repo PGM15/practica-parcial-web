@@ -6,12 +6,12 @@ export default function SeriesCard({ serie, onSelect, toggleFavorite, isFavorite
         borderRadius: "8px",
         padding: "10px",
         textAlign: "center",
-        cursor: onSelect ? "pointer" : "default"
+        cursor: "pointer",
+        background: "#fafafa"
       }}
+      onClick={() => onSelect && onSelect(serie.id)}
     >
-      <h3 onClick={() => onSelect && onSelect(serie.id)}>
-        {serie.name}
-      </h3>
+      <h3>{serie.name}</h3>
 
       {serie.image ? (
         <img
@@ -22,20 +22,27 @@ export default function SeriesCard({ serie, onSelect, toggleFavorite, isFavorite
             borderRadius: "8px",
             marginTop: "10px"
           }}
-          onClick={() => onSelect && onSelect(serie.id)}
         />
       ) : (
         <p>Sin imagen disponible</p>
       )}
 
       <button
-        style={{ marginTop: "10px", padding: "5px 10px" }}
+        style={{
+          marginTop: "10px",
+          padding: "5px 10px",
+          background: isFavorite ? "red" : "#007bff",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer"
+        }}
         onClick={(e) => {
           e.stopPropagation();
           toggleFavorite(serie);
         }}
       >
-        {isFavorite ? "Quitar" : "Favorito"}
+        {isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
       </button>
     </div>
   );
