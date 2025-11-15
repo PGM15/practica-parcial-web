@@ -1,13 +1,15 @@
 import SeriesCard from "./SeriesCard";
 
-export default function SeriesList() {
+export default function SeriesList({ results }) {
   return (
     <div>
       <h2>Resultados</h2>
+
+      {/* Renderizar tarjeta por cada serie */}
       <div>
-        {/* Aquí irán las tarjetas */}
-        <SeriesCard />
-        <SeriesCard />
+        {results.map((serie) => (
+          <SeriesCard key={serie.id} serie={serie} />
+        ))}
       </div>
     </div>
   );

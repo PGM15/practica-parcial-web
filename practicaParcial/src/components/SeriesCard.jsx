@@ -1,8 +1,17 @@
-export default function SeriesCard() {
+export default function SeriesCard({ serie }) {
   return (
-    <div>
-      <h3>Nombre de la Serie</h3>
-      <p>Imagen aquí</p>
+    <div style={{ marginBottom: "20px" }}>
+      <h3>{serie.name}</h3>
+
+      {serie.image ? (
+        <img
+          src={serie.image.medium}
+          alt={serie.name}
+          style={{ width: "200px", borderRadius: "8px" }}
+        />
+      ) : (
+        <p>Sin imagen disponible</p>
+      )}
     </div>
   );
 }
