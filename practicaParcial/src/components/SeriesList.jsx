@@ -1,6 +1,6 @@
 import SeriesCard from "./SeriesCard";
 
-export default function SeriesList({ results, onSelect }) {
+export default function SeriesList({ results, onSelect, toggleFavorite, favorites }) {
   return (
     <div>
       <h2>Resultados</h2>
@@ -14,7 +14,13 @@ export default function SeriesList({ results, onSelect }) {
         }}
       >
         {results.map((serie) => (
-          <SeriesCard key={serie.id} serie={serie} onSelect={onSelect} />
+          <SeriesCard
+            key={serie.id}
+            serie={serie}
+            onSelect={onSelect}
+            toggleFavorite={toggleFavorite}
+            isFavorite={favorites.some(f => f.id === serie.id)}
+          />
         ))}
       </div>
     </div>

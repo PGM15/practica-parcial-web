@@ -1,16 +1,17 @@
-export default function SeriesCard({ serie, onSelect }) {
+export default function SeriesCard({ serie, onSelect, toggleFavorite, isFavorite }) {
   return (
     <div
-      onClick={() => onSelect(serie.id)}
       style={{
         border: "1px solid #ccc",
         borderRadius: "8px",
         padding: "10px",
         textAlign: "center",
-        cursor: "pointer"
+        cursor: onSelect ? "pointer" : "default"
       }}
     >
-      <h3>{serie.name}</h3>
+      <h3 onClick={() => onSelect && onSelect(serie.id)}>
+        {serie.name}
+      </h3>
 
       {serie.image ? (
         <img
@@ -21,10 +22,21 @@ export default function SeriesCard({ serie, onSelect }) {
             borderRadius: "8px",
             marginTop: "10px"
           }}
+          onClick={() => onSelect && onSelect(serie.id)}
         />
       ) : (
-        <p style={{ marginTop: "10px" }}>Sin imagen disponible</p>
+        <p>Sin imagen disponible</p>
       )}
+
+      <button
+        style={{ marginTop: "10px", padding: "5px 10px" }}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleFavorite(serie);
+        }}
+      >
+        {isFavorite ? "Quitar" : "Favorito"}
+      </button>
     </div>
   );
 }
