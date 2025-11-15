@@ -17,11 +17,7 @@ export default function SeriesCard({ serie, onSelect, toggleFavorite, isFavorite
         <img
           src={serie.image.medium}
           alt={serie.name}
-          style={{
-            width: "100%",
-            borderRadius: "8px",
-            marginTop: "10px"
-          }}
+          style={{ width: "100%", borderRadius: "8px", marginTop: "10px" }}
         />
       ) : (
         <p>Sin imagen disponible</p>
@@ -35,7 +31,7 @@ export default function SeriesCard({ serie, onSelect, toggleFavorite, isFavorite
           color: "white",
           border: "none",
           borderRadius: "5px",
-          cursor: "pointer"
+          cursor: "pointer",
         }}
         onClick={(e) => {
           e.stopPropagation();

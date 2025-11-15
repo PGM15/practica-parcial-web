@@ -7,7 +7,6 @@ export default function SeriesList({ results, onSelect, toggleFavorite, favorite
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
         gap: "20px",
-        padding: "10px"
       }}
     >
       {results.map((serie) => (
@@ -16,7 +15,7 @@ export default function SeriesList({ results, onSelect, toggleFavorite, favorite
           serie={serie}
           onSelect={onSelect}
           toggleFavorite={toggleFavorite}
-          isFavorite={favorites.some(f => f.id === serie.id)}
+          isFavorite={favorites.some((f) => f.id === serie.id)}
         />
       ))}
     </div>

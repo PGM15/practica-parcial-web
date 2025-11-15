@@ -12,7 +12,6 @@ export default function FavoritesList({ favorites, toggleFavorite, onSelect }) {
         gap: "20px",
         flexWrap: "wrap",
         justifyContent: "center",
-        marginBottom: "30px"
       }}
     >
       {favorites.map((serie) => (

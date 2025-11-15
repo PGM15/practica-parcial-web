@@ -10,18 +10,17 @@ function App() {
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState(null);
 
-  // Favoritos desde localStorage
+  // Favoritos
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem("favorites");
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Guardar cambios de favoritos
+  // Guardar automáticamente
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  // Buscar series
   const searchSeries = async () => {
     if (!query.trim()) return;
 
@@ -33,7 +32,6 @@ function App() {
     setResults(data.map((item) => item.show));
   };
 
-  // Ver detalles
   const openDetails = async (id) => {
     const res = await fetch(`https://api.tvmaze.com/shows/${id}`);
     const data = await res.json();
@@ -42,46 +40,48 @@ function App() {
 
   const closeModal = () => setSelected(null);
 
-  // Añadir/quitar favoritos
   const toggleFavorite = (serie) => {
-    const exists = favorites.some(f => f.id === serie.id);
+    const exists = favorites.some((f) => f.id === serie.id);
 
     if (exists) {
-      setFavorites(favorites.filter(f => f.id !== serie.id));
+      setFavorites(favorites.filter((f) => f.id !== serie.id));
     } else {
       setFavorites([...favorites, serie]);
     }
   };
 
   return (
-    <div>
-      <h1>Buscador de Series</h1>
+    <div className="app-container">
 
-      <SearchBar
-        query={query}
-        setQuery={setQuery}
-        searchSeries={searchSeries}
-      />
+      <h1 className="main-title">Buscador de Series</h1>
 
-      <h2>Mis Favoritos</h2>
-      <p>Las series que marques como favoritas aparecerán aquí automáticamente.</p>
+      <div className="section">
+        <SearchBar
+          query={query}
+          setQuery={setQuery}
+          searchSeries={searchSeries}
+        />
+      </div>
 
-      <FavoritesList
-        favorites={favorites}
-        toggleFavorite={toggleFavorite}
-        onSelect={openDetails}
-      />
+      <div className="section">
+        <h2 className="section-title">Mis Favoritos</h2>
+        <FavoritesList
+          favorites={favorites}
+          toggleFavorite={toggleFavorite}
+          onSelect={openDetails}
+        />
+      </div>
 
       {results.length > 0 && (
-        <>
-          <h2>Resultados de búsqueda</h2>
+        <div className="section">
+          <h2 className="section-title">Resultados de búsqueda</h2>
           <SeriesList
             results={results}
             onSelect={openDetails}
             toggleFavorite={toggleFavorite}
             favorites={favorites}
           />
-        </>
+        </div>
       )}
 
       {selected && (
