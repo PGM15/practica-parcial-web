@@ -1,11 +1,13 @@
-export default function SeriesCard({ serie }) {
+export default function SeriesCard({ serie, onSelect }) {
   return (
     <div
+      onClick={() => onSelect(serie.id)}
       style={{
         border: "1px solid #ccc",
         borderRadius: "8px",
         padding: "10px",
-        textAlign: "center"
+        textAlign: "center",
+        cursor: "pointer"
       }}
     >
       <h3>{serie.name}</h3>
