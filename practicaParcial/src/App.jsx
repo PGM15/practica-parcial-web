@@ -1,94 +1,115 @@
 import { useState, useEffect } from "react";
-import "./App.css";
 import SearchBar from "./components/SearchBar";
 import SeriesList from "./components/SeriesList";
 import FavoritesList from "./components/FavoritesList";
 import ModalDetail from "./components/ModalDetail";
+import "./styles/layout.css";
 
-function App() {
+export default function App() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState(null);
 
-  // Favoritos
+  const [showHome, setShowHome] = useState(true); 
+  const [loading, setLoading] = useState(false);  // ← LOADER
+
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem("favorites");
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Guardar automáticamente
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
+
+  // Buscar series con loader
   const searchSeries = async () => {
     if (!query.trim()) return;
 
-    const res = await fetch(
-      `https://api.tvmaze.com/search/shows?q=${query}`
-    );
+    setLoading(true);  // ← INICIA loader
+
+    const res = await fetch(`https://api.tvmaze.com/search/shows?q=${query}`);
     const data = await res.json();
 
     setResults(data.map((item) => item.show));
+    setShowHome(false);
+
+    setLoading(false); // ← FINALIZA loader
   };
 
+
+  // Abrir modal (detalle)
   const openDetails = async (id) => {
     const res = await fetch(`https://api.tvmaze.com/shows/${id}`);
     const data = await res.json();
     setSelected(data);
   };
 
-  const closeModal = () => setSelected(null);
 
+  // Añadir o quitar favoritos
   const toggleFavorite = (serie) => {
-    const exists = favorites.some((f) => f.id === serie.id);
-
+    const exists = favorites.some(f => f.id === serie.id);
     if (exists) {
-      setFavorites(favorites.filter((f) => f.id !== serie.id));
+      setFavorites(favorites.filter(f => f.id !== serie.id));
     } else {
       setFavorites([...favorites, serie]);
     }
   };
 
+
   return (
-    <div className="app-container">
+    <div className="container">
 
-      <h1 className="main-title">Buscador de Series</h1>
+      <h1 className="title">Buscador de Series</h1>
 
-      <div className="section">
-        <SearchBar
-          query={query}
-          setQuery={setQuery}
-          searchSeries={searchSeries}
-        />
-      </div>
+      {/* Botón volver a favoritos */}
+      {!showHome && (
+        <button
+          className="home-btn"
+          onClick={() => setShowHome(true)}
+        >
+          ⬅ Volver a favoritos
+        </button>
+      )}
 
-      <div className="section">
-        <h2 className="section-title">Mis Favoritos</h2>
+      <SearchBar query={query} setQuery={setQuery} searchSeries={searchSeries} />
+
+      {/* LOADER */}
+      {loading && <div className="loader"></div>}
+
+      {/* SOLO favoritos si estamos en Home */}
+      {showHome && (
         <FavoritesList
           favorites={favorites}
           toggleFavorite={toggleFavorite}
           onSelect={openDetails}
         />
-      </div>
+      )}
 
-      {results.length > 0 && (
-        <div className="section">
-          <h2 className="section-title">Resultados de búsqueda</h2>
-          <SeriesList
-            results={results}
-            onSelect={openDetails}
-            toggleFavorite={toggleFavorite}
-            favorites={favorites}
-          />
-        </div>
+      {/* Resultados si NO estamos en Home */}
+      {!showHome && !loading && (
+        <SeriesList
+          results={results}
+          onSelect={openDetails}
+          toggleFavorite={toggleFavorite}
+          favorites={favorites}
+/>
+
       )}
 
       {selected && (
-        <ModalDetail serie={selected} onClose={closeModal} />
+        <ModalDetail
+          serie={selected}
+          onClose={() => setSelected(null)}
+          toggleFavorite={toggleFavorite}
+          favorites={favorites}
+        />
       )}
+
+      <footer className="footer">
+        Práctica Parcial – Pablo González Mediavilla
+      </footer>
     </div>
   );
 }
-
-export default App;
